@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 			max = max > diff ? max : diff;
 		}
 
-		printf("Number of loops = %llu\n", n);
+		printf("Number of loops = %llu \n", n);
 		printf("minimum elapsed time = %llu nanoseconds\n", min);
 		printf("maximum elapsed time = %llu nanoseconds\n", max);
 	}
