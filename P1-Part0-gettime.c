@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 	uint64_t diff;
 	struct timespec start, end;
 	
-	while(true)
+	while(1)
 	{
 		printf("%s\n", "ENter the number of loops:");
 		scanf("%d",&n);
