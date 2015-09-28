@@ -23,10 +23,8 @@ int main(int argc, char **argv)
 			min = min < diff ? min : diff;
 			max = max > diff ? max : diff;
 		}
-		printf("Number of loops = %"PRIu64" \n", n);
 		printf("minimum elapsed time = %"PRIu64" nanoseconds\n", min);
 		printf("maximum elapsed time = %"PRIu64" nanoseconds\n", max);
 	}
-
 	return 0;
 }
