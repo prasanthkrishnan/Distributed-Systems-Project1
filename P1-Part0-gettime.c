@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 		uint64_t min = BILLION;
 		uint64_t max = 0;
 		printf("Enter the number of loops: ");
-		scanf("%" SCNu64 "\n", &n);
+		scanf("%"SCNu64, &n);
 		while(n--){
 			clock_gettime(CLOCK_MONOTONIC, &start);	/* mark start time */
 			clock_gettime(CLOCK_MONOTONIC, &end);	/* mark the end time */
@@ -23,6 +23,7 @@ int main(int argc, char **argv)
 			min = min < diff ? min : diff;
 			max = max > diff ? max : diff;
 		}
+		printf("Number of loops = %"PRIu64" \n", n);
 		printf("minimum elapsed time = %"PRIu64" nanoseconds\n", min);
 		printf("maximum elapsed time = %"PRIu64" nanoseconds\n", max);
 	}
