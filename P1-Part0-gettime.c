@@ -8,9 +8,13 @@ int main(int argc, char **argv)
 {
 	int n;
 	uint64_t diff = 0;
-	uint64_t ans = 0;
+	uint64_t ans = BILLION;
 	struct timespec start, end;
 	
+		printf("minimum elapsed time = %llu nanoseconds\n", (long long unsigned int) diff);
+		printf("minimum elapsed time = %llu nanoseconds\n", diff);
+		printf("minimum elapsed time = %llu nanoseconds\n", (long long unsigned int) ans);
+		printf("minimum elapsed time = %llu nanoseconds\n",  ans);
 	while(1)
 	{
 		printf("%s\n", "ENter the number of loops:");
