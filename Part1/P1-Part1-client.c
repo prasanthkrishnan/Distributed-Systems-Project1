@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 	struct sockaddr_in addr, addr2;
 	assert(UDP_FillSockAddr(&addr, SERVER_HOSTNAME, SERVER_PORT) > -1);
 	int i;
-	for (i = sequence_number; i <= sequence_number + number_of_packets; ++i)
+	for (i = sequence_number; i < sequence_number + number_of_packets; ++i)
 	{
 		// i is used as sequence number
 		char packet[MSG_BUFFER_SIZE];
