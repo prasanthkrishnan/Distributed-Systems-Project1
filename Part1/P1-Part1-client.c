@@ -5,6 +5,14 @@
 #include <time.h>
 #include <inttypes.h>
 #include <stdio.h>
+#include <stdlib.h>
+
+
+
+int compare (const void * a, const void * b)
+{
+  return ( *(uint64_t*)a - *(uint64_t*)b );
+}
 
 uint64_t getdiff(struct timespec start, struct timespec end) {
 	return (BILLION * (end.tv_sec - start.tv_sec) + end.tv_nsec - start.tv_nsec);
@@ -52,38 +60,46 @@ int main(int argc, char *argv[]) {
 		// Overhead end
 		clock_gettime(CLOCK_MONOTONIC, &(overhead_end[i - sequence_number]));
 		timeout:
-		printf("%s %d\n", "Sending packet sequence_number:", i);
+		// printf("%s %d\n", "Sending packet sequence_number:", i);
 		wc = UDP_Write(sd, &addr, packet, MSG_BUFFER_SIZE);
 		if ( wc > 0) {
 			char ack[ACK_BUFFER_SIZE];
 			// wait for the ack
 			int rc = UDP_Read(sd, &addr2, ack, ACK_BUFFER_SIZE);
 			if(rc > 0) {
-				printf("Ack received: \"%s\"\n", ack);
+				// printf("Ack received: \"%s\"\n", ack);
 			}
 			else {
-				printf("%s %d\n", "timeout for packet sequence_number:", i);
+				// printf("%s %d\n", "timeout for packet sequence_number:", i);
 				goto timeout;
 			}
 		}
 		else {
-			printf("%s %d\n", "Write failed for sequence_number:", i);
+			// printf("%s %d\n", "Write failed for sequence_number:", i);
 			goto timeout;
 		}
 		clock_gettime(CLOCK_MONOTONIC, &(RTT_end[i - sequence_number]));
 	}
 	clock_gettime(CLOCK_MONOTONIC, &Total_time_end);
-
+	printf("Number of packets:%d \n",number_of_packets);
 	printf("Total time elapsed = %"PRIu64" nanoseconds\n", getdiff(Total_time_start,Total_time_end));
+	printf("Bandwidth = %"PRIu64" nanoseconds\n", getdiff(Total_time_start,Total_time_end));
+	uint64_t RTT[number_of_packets], overhead[number_of_packets];
+	
+	for (i = 0; i < number_of_packets; ++i)
+	{
+		RTT[i] = getdiff(RTT_start[i],RTT_end[i]);
+		// printf("%"PRIu64" ", RTT[i]);
+	}
+	qsort(RTT, number_of_packets, sizeof(uint64_t), compare);
+	printf("RTT = %"PRIu64" nanoseconds\n", RTT[number_of_packets / 2]);
+	for (i = 0; i < number_of_packets; ++i)
+	{
+		overhead[i] = getdiff(overhead_start[i],overhead_end[i]);
+		// printf("%"PRIu64" ", overhead[i]);
+	}
+	qsort(overhead, number_of_packets, sizeof(uint64_t), compare);
 
-	for (i = 0; i < number_of_packets; ++i)
-	{
-		printf("%"PRIu64" ", getdiff(RTT_start[i],RTT_end[i]));
-	}
-	printf("\n");
-	for (i = 0; i < number_of_packets; ++i)
-	{
-		printf("%"PRIu64" ", getdiff(overhead_start[i],overhead_end[i]));
-	}
+	printf("overhead = %"PRIu64" nanoseconds\n", overhead[number_of_packets / 2]);
 	return 0;
 }

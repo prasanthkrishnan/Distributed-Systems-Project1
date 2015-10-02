@@ -1,6 +1,10 @@
 #ifndef constants
 // (65,535  − 8 byte UDP header − 20 byte IP header)
-#define MSG_BUFFER_SIZE  65507
+// 65507 => 64 KB
+// 32737 => 32 KB
+// 16355 => 16 KB
+// 995 => 1 KB
+#define MSG_BUFFER_SIZE  995
 #define ACK_BUFFER_SIZE  32
 #define SERVER_PORT 10000
 #define TIMEOUT_IN_SECONDS 3

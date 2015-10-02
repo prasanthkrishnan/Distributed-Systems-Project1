@@ -27,13 +27,14 @@ int main(int argc, char *argv[]) {
 		// Server waits till mesaage is recived
 		int rc = UDP_Read_without_timeout(sd, &s, read_packet, MSG_BUFFER_SIZE);
 		if (rc > 0) {
-			printf("received message sequence_number: %s \n", read_packet);
+			// printf("received message sequence_number: %s \n", read_packet);
 			char ack[ACK_BUFFER_SIZE];
 			strncpy(ack, read_packet, ACK_BUFFER_SIZE);
-			if(isDuplicate(&server_sequence_number,ack))
-				printf("Duplicate Message received\n");
+			if(isDuplicate(&server_sequence_number,ack)){
+				// printf("Duplicate Message received\n");
+			}
 			if(should_send()) {
-				printf("sending ack packet sequence_number : %s\n", ack);
+				// printf("sending ack packet sequence_number : %s\n", ack);
 				UDP_Write(sd, &s, ack, ACK_BUFFER_SIZE);
 			}
 		}
