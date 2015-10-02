@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 				// printf("Ack received: \"%s\"\n", ack);
 			}
 			else {
-				// printf("%s %d\n", "timeout for packet sequence_number:", i);
+				printf("%s %d\n", "timeout for packet sequence_number:", i);
 				goto timeout;
 			}
 		}
@@ -83,14 +83,14 @@ int main(int argc, char *argv[]) {
 	clock_gettime(CLOCK_MONOTONIC, &Total_time_end);
 	printf("Number of packets:%d \n",number_of_packets);
 	printf("Total time elapsed = %"PRIu64" nanoseconds\n", getdiff(Total_time_start,Total_time_end));
-	printf("Bandwidth = %"PRIu64" nanoseconds\n", getdiff(Total_time_start,Total_time_end));
 	uint64_t RTT[number_of_packets], overhead[number_of_packets];
 	
 	for (i = 0; i < number_of_packets; ++i)
 	{
 		RTT[i] = getdiff(RTT_start[i],RTT_end[i]);
-		// printf("%"PRIu64" ", RTT[i]);
+		printf("%"PRIu64" ", RTT[i]);
 	}
+	printf("\n");
 	qsort(RTT, number_of_packets, sizeof(uint64_t), compare);
 	printf("RTT = %"PRIu64" nanoseconds\n", RTT[number_of_packets / 2]);
 	for (i = 0; i < number_of_packets; ++i)

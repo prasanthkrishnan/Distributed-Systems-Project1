@@ -2,6 +2,7 @@
 #include <constants.h>
 #include <assert.h>
 #include <string.h>
+#include <stdlib.h>
 
 int isDuplicate(int *server_sequence_number, char ack[ACK_BUFFER_SIZE]) {
 	int received_seq_number = atoi(ack);
@@ -14,10 +15,13 @@ int isDuplicate(int *server_sequence_number, char ack[ACK_BUFFER_SIZE]) {
 }
 
 int should_send() {
-	return 1;
+	return (DROP_PROBABILITY > 0 ? (rand() % 100) > DROP_PROBABILITY : 1);
 }
 
 int main(int argc, char *argv[]) {
+	
+	srand((unsigned) time(NULL));
+
 	int sd = UDP_Open(SERVER_PORT);
 	assert(sd > -1);
 	int server_sequence_number = SEQUENCE_NUMBER -1;
