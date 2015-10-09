@@ -46,7 +46,7 @@ int UDP_Read_without_timeout(int sd, struct sockaddr_in *addr, char *buffer, int
 
 int UDP_Read(int sd, struct sockaddr_in *addr, char *buffer, int n) {
 	struct timeval tv = {0,0};
-    tv.tv_sec = TIMEOUT_IN_SECONDS;
+    tv.tv_usec = TIMEOUT_IN_SECONDS;
     fd_set readset = {};
     FD_ZERO(&readset);
     FD_SET(sd, &readset);
