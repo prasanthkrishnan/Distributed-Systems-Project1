@@ -6,6 +6,8 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <strings.h>
+#include <sys/select.h>
+#include <sys/time.h>
 
 int UDP_Open(int port);
 int UDP_FillSockAddr(struct sockaddr_in *addr, char *hostName, int port);

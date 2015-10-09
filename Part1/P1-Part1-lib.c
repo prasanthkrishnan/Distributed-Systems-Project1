@@ -4,6 +4,9 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <strings.h>
+#include <sys/select.h>
+#include <sys/time.h>
+#include <constants.h>
 
 int UDP_Open(int port) {
 	int sd;
@@ -34,8 +37,31 @@ int UDP_Write(int sd, struct sockaddr_in *addr, char *buffer, int n) {
 	int addrLen = sizeof(struct sockaddr_in);
 	return sendto(sd, buffer, n, 0, (struct sockaddr *) addr, addrLen);
 }
+
+// used in server for reading the message
+int UDP_Read_without_timeout(int sd, struct sockaddr_in *addr, char *buffer, int n) {
+ 		int len = sizeof(struct sockaddr_in);
+		return recvfrom(sd, buffer, n, 0, (struct sockaddr *) addr, (socklen_t *) &len);
+}
+
 int UDP_Read(int sd, struct sockaddr_in *addr, char *buffer, int n) {
-	int len = sizeof(struct sockaddr_in);
-	return recvfrom(sd, buffer, n, 0, (struct sockaddr *) addr,
-		(socklen_t *) &len);
+	struct timeval tv = {0,0};
+    tv.tv_usec = TIMEOUT_IN_SECONDS;
+    fd_set readset = {};
+    FD_ZERO(&readset);
+    FD_SET(sd, &readset);
+
+    select(sd+1, &readset, NULL, NULL, &tv);
+
+    if (FD_ISSET(sd, &readset))
+    {
+    	// I/O available
+ 		int len = sizeof(struct sockaddr_in);
+		return recvfrom(sd, buffer, n, 0, (struct sockaddr *) addr, (socklen_t *) &len);
+    }
+    else
+    {
+    	// timeouts
+       return -1;
+    }
 }
